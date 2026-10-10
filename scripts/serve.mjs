@@ -11,7 +11,7 @@ const port=8765;
 createServer(async(req,res)=>{
   try{
     const url=new URL(req.url,'http://127.0.0.1:'+port);
-    const path=resolve(root,'.'+decodeURIComponent(url.pathname==='/'=>'/index.html':url.pathname));
+    const path=resolve(root,'.'+decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname));
     if(path!==root&&!path.startsWith(root+sep)){res.writeHead(403);res.end('Forbidden');return;}
     if(!Object.hasOwn(mime,extname(path))){res.writeHead(404);res.end('Not found');return;}
     const meta=await stat(path);if(!meta.isFile())throw Error('Not a file');
