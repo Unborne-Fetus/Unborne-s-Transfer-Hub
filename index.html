@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1514">
+  <title>Unborne's Transfer Hub</title>
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">↔</div><div><strong>UNBORNE'S</strong><span>TRANSFER HUB</span></div></div>
+    <span class="status"><span class="status-dot"></span> Local • Offline first</span>
+  </header>
+  <main class="shell">
+    <section class="intro">
+      <div><p class="eyebrow">YOUR POKÉMON, ONE PLACE</p><h1>Every journey.<br><em>One collection.</em></h1>
+      <p class="intro-desc">Start by opening your Brisk Emerald save. Inspect your Pokémon with Brisk Dex's original 2D front sprites and collect copies in a portable vault.</p></div>
+      <div class="milestones"><div><span class="step">01</span><strong>Import save</strong><small>Local file • Never overwritten</small></div><div><span class="step">02</span><strong>Browse collection</strong><small>Party, boxes & shiny Pokémon</small></div><div><span class="step">03</span><strong>Build your vault</strong><small>Archive export / import</small></div></div>
+    </section>
+    <section class="workbench">
+      <aside class="sidebar">
+        <div class="panel-title"><h2>My games</h2><span id="gameCount" class="count">0 saves</span></div>
+        <label class="import-tile" id="dropZone">
+          <span class="import-icon">+</span><strong>Import save files</strong><small>Choose or drop .sav / .srm</small>
+          <input type="file" id="saveInput" accept=".sav,.srm" multiple>
+        </label>
+        <div id="games" class="games"></div>
+        <div class="notice">Original saves are only read, never modified. This prototype cannot write Pokémon into game saves.</div>
+        <div class="sidebar-bottom"><button class="secondary full" id="importVault">Import vault archive</button><input hidden type="file" id="vaultInput" accept=".json"><button class="secondary full" id="exportVault">Export vault archive</button></div>
+      </aside>
+      <section class="workspace">
+        <div class="workspace-bar">
+          <div><p class="eyebrow">COLLECTION</p><h2 id="collectionTitle">Choose a save to begin</h2><p id="saveDetails" class="muted">Pokémon from your party and PC boxes will appear here.</p></div>
+          <button id="vaultTab" class="vault-button">◆ Vault <span id="vaultCount">0</span></button>
+        </div>
+        <div id="tabs" class="tabs"></div>
+        <div id="stats" class="stats"></div>
+        <div id="collection" class="collection"><div class="empty"><div class="empty-symbol">✦</div><h3>Your transfer story starts here</h3><p>Add a Brisk Emerald save to view its Pokémon, or open the vault to explore your archived collection.</p></div></div>
+        <p class="footer-note">Milestone 1: save inspection & archive only. Cross-game transfers will require dedicated verified adapters.</p>
+      </section>
+    </section>
+    <div id="message" class="toast" role="status" aria-live="polite"></div>
+  </main>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
