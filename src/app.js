@@ -12,7 +12,7 @@ function readStoredVault() {
 }
 function validVaultMon(mon) {
   return mon && Number.isInteger(mon.species) && mon.species > 0 && mon.species <= 2047 &&
-    typeof mon.record === 'string' && /^[A-Za-z0-9+/]{106}==$/.test(mon.record) &&
+    typeof mon.record === 'string' && /^[A-Za-z0-9+/]{107}=$/.test(mon.record) &&
     typeof mon.origin === 'string' && mon.origin.length <= 120;
 }
 function persistVault() {
