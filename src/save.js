@@ -21,7 +21,7 @@ function calcChecksum(bytes,length){
   const view=dv(bytes);let s=0;for(let i=0;i<length;i+=4)s=(s+view.getUint32(i,true))>>>0;
   return ((s>>>16)+(s&65535))&65535;
 }
-function scanBlock(bytes,start){
+function scanBlock(bytes,start,extended=false){
   const sections=Array(14).fill(null);let index=null;
   for(let n=0;n<14;n++){
     const off=start+n*SECTOR;
@@ -33,7 +33,7 @@ function scanBlock(bytes,start){
     if(index!==null && seq!==index) return null;
     index=seq;
     const section=bytes.subarray(off,off+DATA);
-    if(calcChecksum(section,SIZES[id])!==view.getUint16(0xFF6,true)) return null;
+    if(calcChecksum(section,id===13 && extended?3968:SIZES[id])!==view.getUint16(0xFF6,true)) return null;
     sections[id]=section;
   }
   if(sections.some(s=>s===null))return null;
@@ -81,7 +81,8 @@ export function decodeRecord(record,party=false){
 export function parseSave(buffer){
   const bytes=new Uint8Array(buffer);
   if(bytes.byteLength!==131072)throw Error('Expected a 128 KiB Gen III .sav or .srm file. This format is not supported yet.');
-  const a=scanBlock(bytes,0),b=scanBlock(bytes,0xE000);
+  const extension=readExtension(bytes);
+  const a=scanBlock(bytes,0,!!extension),b=scanBlock(bytes,0xE000,!!extension);
   if(!a&&!b)throw Error('No complete, checksummed Gen III save bank found. The file may be incompatible or damaged.');
   const block=a&&b?(((a.index-b.index)>>>0)<0x80000000?a:b):(a||b);
   const s=block.sections, trainer=nameText(s[0].subarray(0,7))||'TRAINER';
@@ -92,7 +93,7 @@ export function parseSave(buffer){
     if(pokemon?.corrupt)problems.badRecords++;
     else if(pokemon)party.push({...pokemon,slot:i+1});
   }
-  const extension=readExtension(bytes),count=extension?20:14;
+  const count=extension?20:14;
   const pieces=[];
   for(let n=5;n<=13;n++)pieces.push(extension?s[n]:n===13?s[n].subarray(0,2000):s[n]);
   if(extension)pieces.push(...extension);
